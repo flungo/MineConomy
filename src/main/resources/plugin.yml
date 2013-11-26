@@ -1,6 +1,6 @@
-name: MineConomy
-main: me.mjolnir.mineconomy.MineConomy
-version: 1.6
+name: ${project.name}
+main: ${main.class}
+version: ${project.version}
 description: >
              MineConomy is a simple, multi-feature Economy Plugin for Bukkit.
 permissions:
@@ -263,4 +263,3 @@ commands:
    mcb transfer:
       description: Transfers the specified amount from bank account to bank account.
       usage: /mcb transfer <bank> <account> <tobank> <toaccount> <amount>
-   

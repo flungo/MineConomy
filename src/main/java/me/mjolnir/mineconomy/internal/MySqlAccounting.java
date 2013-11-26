@@ -8,26 +8,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.TreeSet;
-
 import me.mjolnir.mineconomy.internal.util.IOH;
 
 @SuppressWarnings("javadoc")
-public final class MySqlAccounting extends AccountingBase
-{
+public final class MySqlAccounting extends AccountingBase {
+
     private static Connection con = null;
     private static String driver = "com.mysql.jdbc.Driver";
-    
-    protected MySqlAccounting()
-    {
+
+    protected MySqlAccounting() {
         //
     }
-    
-    public void load()
-    {
+
+    public void load() {
         IOH.log("Loading Accounts from database...", IOH.INFO);
-        
-        try
-        {
+
+        try {
             Class.forName(driver).newInstance(); //Settings.dburl + ":3306/"
             con = DriverManager
                     .getConnection("jdbc:mysql://" + Settings.dburl + Settings.dbname, Settings.dbuser, Settings.dbpass);
@@ -36,208 +32,157 @@ public final class MySqlAccounting extends AccountingBase
             st.execute(com);
             com = "SELECT * FROM mineconomy_accounts WHERE id = '1'";
             st.execute(com);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             IOH.error("MySQL Error", e);
         }
-        
+
         ArrayList<String> result = new ArrayList<String>();
-        
-        try
-        {
+
+        try {
             ResultSet rs = con.createStatement().executeQuery("SELECT account FROM mineconomy_accounts");
-            
-            while (rs.next())
-            {
+
+            while (rs.next()) {
                 result.add(rs.getString("account"));
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             IOH.error("MySQL Error", e);
         }
-        
+
         hashaccount = new Hashtable<String, String>();
         treeaccount = new TreeSet<String>();
-        
-        for (int i = 0; result.size() > i; i++)
-        {
+
+        for (int i = 0; result.size() > i; i++) {
             hashaccount.put(result.get(i).toLowerCase(), result.get(i));
             treeaccount.add(result.get(i).toLowerCase());
         }
-        
+
         IOH.log("Accounts loaded from database!", IOH.INFO);
     }
-    
-    public void reload()
-    {
+
+    public void reload() {
         // Nothing to reload.
     }
-    
-    public void save()
-    {
+
+    public void save() {
         reload();
     }
-    
-    protected double getBalance(String account)
-    {
-        try
-        {
+
+    protected double getBalance(String account) {
+        try {
             ResultSet st = con.createStatement().executeQuery("SELECT balance FROM mineconomy_accounts WHERE account = '" + account + "'");
             st.next();
             return st.getDouble(1);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             IOH.error("MySQL Error", e);
             return 0;
         }
     }
-    
-    protected void setBalance(String account, double amount)
-    {
+
+    protected void setBalance(String account, double amount) {
         amount = (double) Math.round(amount * 100) / 100;
-        
-        if (amount > 9999999.99)
-        {
-            amount = 9999999.99;
+
+        if (amount > 999999999.99) {
+            amount = 999999999.99;
         }
-        
-        try
-        {
+
+        try {
             Statement st = con.createStatement();
             String com = "UPDATE mineconomy_accounts SET balance = '" + amount + "' WHERE account = '" + account + "';";
             st.execute(com);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             IOH.error("MySQL Error", e);
         }
     }
-    
-    protected boolean exists(String account)
-    {
-        try
-        {
+
+    protected boolean exists(String account) {
+        try {
             ResultSet st = con.createStatement().executeQuery("SELECT * FROM mineconomy_accounts WHERE account = '" + account + "'");
             return st.next();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             IOH.error("MySQL Error", e);
             return false;
         }
     }
-    
-    protected void delete(String account)
-    {
-        try
-        {
+
+    protected void delete(String account) {
+        try {
             Statement st = con.createStatement();
             String com = "DELETE FROM mineconomy_accounts WHERE account = '" + account + "';";
             st.execute(com);
             hashaccount.remove(account.toLowerCase());
             treeaccount.remove(account.toLowerCase());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             IOH.error("MySQL Error", e);
         }
     }
-    
-    protected void create(String account)
-    {
-        try
-        {
+
+    protected void create(String account) {
+        try {
             Statement st = con.createStatement();
             String com = "INSERT INTO mineconomy_accounts(account, balance, currency, status) VALUES ('" + account + "', " + Settings.startingBalance + ", '" + Currency.getDefault() + "', 'NORMAL')";
             st.execute(com);
             hashaccount.put(account.toLowerCase(), account);
             treeaccount.add(account.toLowerCase());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             IOH.error("MySQL Error", e);
         }
     }
-    
-    protected String getCurrency(String account)
-    {
-        try
-        {
+
+    protected String getCurrency(String account) {
+        try {
             ResultSet st = con.createStatement().executeQuery("SELECT currency FROM mineconomy_accounts WHERE account = '" + account + "'");
             st.next();
             return st.getString(1);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             IOH.error("MySQL Error", e);
             return "";
         }
     }
-    
-    protected void setCurrency(String account, String currency)
-    {
-        try
-        {
+
+    protected void setCurrency(String account, String currency) {
+        try {
             Statement st = con.createStatement();
             String com = "UPDATE mineconomy_accounts SET currency = '" + currency + "' WHERE account = '" + account + "';";
             st.execute(com);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             IOH.error("MySQL Error", e);
         }
     }
-    
-    protected String getStatus(String account)
-    {
-        try
-        {
+
+    protected String getStatus(String account) {
+        try {
             ResultSet st = con.createStatement().executeQuery("SELECT status FROM mineconomy_accounts WHERE account = '" + account + "'");
             st.next();
             return st.getString(1);
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             IOH.error("MySQL Error", e);
             return "";
         }
     }
-    
-    protected void setStatus(String account, String status)
-    {
-        try
-        {
+
+    protected void setStatus(String account, String status) {
+        try {
             Statement st = con.createStatement();
             String com = "UPDATE mineconomy_accounts SET status = '" + status + "' WHERE account = '" + account + "';";
             st.execute(com);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             IOH.error("MySQL Error", e);
         }
     }
-    
-    protected ArrayList<String> getAccounts()
-    {
+
+    protected ArrayList<String> getAccounts() {
         ArrayList<String> result = new ArrayList<String>();
-        
-        try
-        {
+
+        try {
             ResultSet rs = con.createStatement().executeQuery("SELECT account FROM mineconomy_accounts");
-            
-            while (rs.next())
-            {
+
+            while (rs.next()) {
                 result.add(rs.getString("account"));
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             IOH.error("MySQL Error", e);
         }
-        
+
         return result;
     }
 }

@@ -1,17 +1,13 @@
 package me.mjolnir.mineconomy;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import me.mjolnir.mineconomy.internal.Banking;
 import me.mjolnir.mineconomy.internal.Currency;
 import me.mjolnir.mineconomy.internal.MCCom;
@@ -24,7 +20,6 @@ import me.mjolnir.mineconomy.internal.gui.GUI;
 import me.mjolnir.mineconomy.internal.listeners.MCListener;
 import me.mjolnir.mineconomy.internal.util.IOH;
 import me.mjolnir.mineconomy.internal.util.Update;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -32,16 +27,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * A simple, mid-weight Economy Bukkit Plugin.
- * 
+ *
  * @author MjolnirCommando
  * @version 1.1
  */
-public class MineConomy extends JavaPlugin
-{
+public class MineConomy extends JavaPlugin {
+
     /**
      * Holds the main directory of the MineConomy data files.
      */
-    public static String     maindir = "plugins/MineConomy/";
+    public static String maindir = "plugins/MineConomy/";
 
     /**
      * MineConomy shortcut to plugin.
@@ -52,22 +47,20 @@ public class MineConomy extends JavaPlugin
      * The id of the Bukkit build which is currently running.
      */
     public static String bukkitVersion = "";
-    
-    private static String    version;
 
-    public void onEnable()
-    {
+    private static String version;
+
+    public void onEnable() {
         plugin = this;
-        
+
         PluginDescriptionFile pdfFile = this.getDescription();
         version = pdfFile.getVersion();
-        
+
         IOH.loadLog();
-        
+
         IOH.log("Enabling plugin...", IOH.INFO);
 
-        if (checkVersion())
-        {
+        if (checkVersion()) {
             onDisable();
             return;
         }
@@ -76,33 +69,7 @@ public class MineConomy extends JavaPlugin
 
         load();
 
-        File readme = new File(MineConomy.maindir + "README.txt");
-        try
-        {
-            if (readme.createNewFile())
-            {
-                PrintWriter out = new PrintWriter(readme);
-
-                Scanner in = new Scanner(
-                        new BufferedReader(
-                                new InputStreamReader(
-                                        Settings.class
-                                                .getClassLoader()
-                                                .getResourceAsStream(
-                                                        "me/mjolnir/mineconomy/dev/readme_template.txt"))));
-                while (in.hasNextLine())
-                {
-                    out.println(in.nextLine());
-                }
-
-                out.close();
-                in.close();
-            }
-        }
-        catch (IOException e)
-        {
-            IOH.error("IOException", e);
-        }
+        saveResource("README.txt", true);
 
         getServer().getPluginManager().registerEvents(new MCListener(), this);
 
@@ -112,13 +79,10 @@ public class MineConomy extends JavaPlugin
         getCommand("money").setExecutor(executor);
         getCommand("mcb").setExecutor(executor);
 
-        if (Settings.autosaveInterval > 0)
-        {
+        if (Settings.autosaveInterval > 0) {
             this.getServer().getScheduler()
-                    .scheduleSyncRepeatingTask(this, new Runnable()
-                    {
-                        public void run()
-                        {
+                    .scheduleSyncRepeatingTask(this, new Runnable() {
+                        public void run() {
                             IOH.log("Auto-Saving files...", IOH.INFO);
 
                             save();
@@ -126,42 +90,30 @@ public class MineConomy extends JavaPlugin
                             IOH.log("Finished auto-save.", IOH.INFO);
                         }
                     }, 20, Settings.autosaveInterval * 20);
-        }
-        else
-        {
+        } else {
             IOH.log("Auto-Saving Disabled.", IOH.INFO);
         }
 
-        if (Settings.interestInterval > 0)
-        {
+        if (Settings.interestInterval > 0) {
             this.getServer().getScheduler()
-                    .scheduleSyncRepeatingTask(this, new Runnable()
-                    {
-                        public void run()
-                        {
+                    .scheduleSyncRepeatingTask(this, new Runnable() {
+                        public void run() {
                             IOH.log("Giving interest...", IOH.INFO);
 
-                            if (Settings.interestMode.equalsIgnoreCase("none"))
-                            {
+                            if (Settings.interestMode.equalsIgnoreCase("none")) {
                                 IOH.log("Your Interest Mode is set to \"none\". "
                                         + "To improve server performance, please set Interest Interval to 0.",
                                         IOH.IMPORTANT);
-                            }
-                            else if (Settings.interestMode
-                                    .equalsIgnoreCase("fixed"))
-                            {
+                            } else if (Settings.interestMode
+                            .equalsIgnoreCase("fixed")) {
                                 IOH.log("Interest Mode set to FIXED.", IOH.INFO);
                                 Interest.fixed();
-                            }
-                            else if (Settings.interestMode
-                                    .equalsIgnoreCase("percent"))
-                            {
+                            } else if (Settings.interestMode
+                            .equalsIgnoreCase("percent")) {
                                 IOH.log("Interest Mode set to PERCENT.",
                                         IOH.INFO);
                                 Interest.percent();
-                            }
-                            else
-                            {
+                            } else {
                                 IOH.log("Interest Mode could not be identified.",
                                         IOH.IMPORTANT);
                             }
@@ -169,40 +121,28 @@ public class MineConomy extends JavaPlugin
                             IOH.log("Finished giving interest.", IOH.INFO);
                         }
                     }, 20, Settings.interestInterval * 20);
-        }
-        else
-        {
+        } else {
             IOH.log("Interest Disabled.", IOH.INFO);
         }
 
-        if (Settings.taxInterval > 0)
-        {
+        if (Settings.taxInterval > 0) {
             this.getServer().getScheduler()
-                    .scheduleSyncRepeatingTask(this, new Runnable()
-                    {
-                        public void run()
-                        {
+                    .scheduleSyncRepeatingTask(this, new Runnable() {
+                        public void run() {
                             IOH.log("Taxing...", IOH.INFO);
 
-                            if (Settings.taxMode.equalsIgnoreCase("none"))
-                            {
+                            if (Settings.taxMode.equalsIgnoreCase("none")) {
                                 IOH.log("Your Tax Mode is set to \"none\". "
                                         + "To improve server performance, please set Tax Interval to 0.",
                                         IOH.IMPORTANT);
-                            }
-                            else if (Settings.taxMode.equalsIgnoreCase("fixed"))
-                            {
+                            } else if (Settings.taxMode.equalsIgnoreCase("fixed")) {
                                 IOH.log("Tax Mode set to FIXED.", IOH.INFO);
                                 Tax.fixed();
-                            }
-                            else if (Settings.taxMode
-                                    .equalsIgnoreCase("percent"))
-                            {
+                            } else if (Settings.taxMode
+                            .equalsIgnoreCase("percent")) {
                                 IOH.log("Tax Mode set to PERCENT.", IOH.INFO);
                                 Tax.percent();
-                            }
-                            else
-                            {
+                            } else {
                                 IOH.log("Tax Mode could not be identified.",
                                         IOH.IMPORTANT);
                             }
@@ -210,52 +150,40 @@ public class MineConomy extends JavaPlugin
                             IOH.log("Finished taxes.", IOH.INFO);
                         }
                     }, 20, Settings.taxInterval * 20);
-        }
-        else
-        {
+        } else {
             IOH.log("Tax Disabled.", IOH.INFO);
         }
 
-        if (Settings.gui)
-        {
+        if (Settings.gui) {
             IOH.log("Creating GUI...", IOH.INFO);
             new GUI();
-        }
-        else
-        {
+        } else {
             IOH.log("GUI Disabled.", IOH.INFO);
         }
 
         IOH.log("Checking for updates...", IOH.INFO);
 
-        if (Update.check())
-        {
+        if (Update.check()) {
             IOH.log("Updates available. Check http://dev.bukkit.org/server-mods/mineconomy/ for the update.",
                     IOH.VERY_IMPORTANT);
-        }
-        else
-        {
+        } else {
             IOH.log("No updates available. MineConomy is up to date!", IOH.INFO);
         }
 
         File f;
 
-        if (Settings.migrate.equalsIgnoreCase("iconomy"))
-        {
+        if (Settings.migrate.equalsIgnoreCase("iconomy")) {
 
             f = new File(maindir + "../iConomy/accounts.mini");
 
-            if (f.exists())
-            {
+            if (f.exists()) {
                 File n = new File(maindir + "accounts.yml.convert");
 
-                if (!n.exists())
-                {
+                if (!n.exists()) {
                     IOH.log("MineConomy has found an iConomy accounts file. MineConomy will convert it and save it to the MineConomy folder as \"accounts.yml.convert\".",
                             IOH.VERY_IMPORTANT);
 
-                    try
-                    {
+                    try {
                         YamlConfiguration accounts = new YamlConfiguration();
                         accounts.options()
                                 .header("=== MineConomy Accounts ===\n\n    Do not edit!\n");
@@ -264,29 +192,24 @@ public class MineConomy extends JavaPlugin
 
                         int linenum = 0;
 
-                        while (in.hasNextLine())
-                        {
+                        while (in.hasNextLine()) {
                             String line = in.nextLine();
                             linenum += 1;
 
-                            if (line != "")
-                            {
+                            if (line != "") {
                                 String[] args = line.split(" ");
 
-                                try
-                                {
+                                try {
                                     accounts.set("Accounts." + args[0]
                                             + ".Balance", Double
                                             .parseDouble(args[1].replace(
-                                                    "balance:", "")));
+                                                            "balance:", "")));
                                     accounts.set("Accounts." + args[0]
                                             + ".Status", "NORMAL");
                                     accounts.set("Accounts." + args[0]
                                             + ".Currency",
                                             MCCom.getDefaultCurrency());
-                                }
-                                catch (Exception e)
-                                {
+                                } catch (Exception e) {
                                     IOH.error("Parse Data (Line " + linenum
                                             + "): \"" + line
                                             + "\"\nParse Error", e);
@@ -297,31 +220,22 @@ public class MineConomy extends JavaPlugin
                         in.close();
 
                         accounts.save(n);
-                    }
-                    catch (FileNotFoundException e)
-                    {
+                    } catch (FileNotFoundException e) {
                         IOH.error("FileNotFoundException", e);
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         IOH.error("IOException", e);
                     }
-                }
-                else
-                {
+                } else {
                     IOH.log("MineConomy could NOT find an iConomy accounts file. MineConomy can NOT convert files.",
                             IOH.VERY_IMPORTANT);
                 }
             }
 
-        }
-        else if (Settings.migrate.equalsIgnoreCase("mysql"))
-        {
+        } else if (Settings.migrate.equalsIgnoreCase("mysql")) {
 
             f = new File(maindir + "accounts.yml");
 
-            if (f.exists() && Settings.dbtype.equalsIgnoreCase("mysql"))
-            {
+            if (f.exists() && Settings.dbtype.equalsIgnoreCase("mysql")) {
                 IOH.log("MineConomy will now migrate your account data from your \"accounts.yml\" file to your MySQL database.",
                         IOH.VERY_IMPORTANT);
 
@@ -332,13 +246,11 @@ public class MineConomy extends JavaPlugin
 
                 ArrayList<String> accountlist = new ArrayList<String>();
 
-                for (int i = 0; t.length > i; i++)
-                {
+                for (int i = 0; t.length > i; i++) {
                     String[] parent = t[i].toString().replace(".", "-")
                             .split("-");
 
-                    if (parent.length == 1)
-                    {
+                    if (parent.length == 1) {
                         accountlist.add(parent[0]);
                     }
                 }
@@ -346,28 +258,23 @@ public class MineConomy extends JavaPlugin
                 Connection con = null;
                 String driver = "com.mysql.jdbc.Driver";
 
-                try
-                {
+                try {
                     Class.forName(driver).newInstance();
                     con = DriverManager.getConnection("jdbc:mysql://"
                             + Settings.dburl + Settings.dbname,
                             Settings.dbuser, Settings.dbpass);
 
-                    try
-                    {
+                    try {
                         Statement st = con.createStatement();
                         String com = "SELECT * FROM mineconomy_accounts WHERE id = '1'";
                         st.execute(com);
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         Statement st = con.createStatement();
                         String com = "CREATE TABLE mineconomy_accounts(id int NOT NULL AUTO_INCREMENT, account text NOT NULL, balance double NOT NULL, currency text NOT NULL, status text NOT NULL, PRIMARY KEY (id) )";
                         st.execute(com);
                     }
 
-                    for (int i = 0; accountlist.size() > i; i++)
-                    {
+                    for (int i = 0; accountlist.size() > i; i++) {
                         Statement st = con.createStatement();
                         String com = "INSERT INTO mineconomy_accounts(account, balance, currency, status) VALUES ('"
                                 + accountlist.get(i)
@@ -378,14 +285,10 @@ public class MineConomy extends JavaPlugin
                                 + "', 'NORMAL')";
                         st.execute(com);
                     }
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     IOH.error("MySQL Error", e);
                 }
-            }
-            else
-            {
+            } else {
                 IOH.log("MineConomy could not find a valid accounts file to migrate from.",
                         IOH.VERY_IMPORTANT);
             }
@@ -399,12 +302,10 @@ public class MineConomy extends JavaPlugin
 
     }
 
-    public void onDisable()
-    {
+    public void onDisable() {
         IOH.log("Disabling MineConomy...", IOH.INFO);
 
-        if (Settings.gui)
-        {
+        if (Settings.gui) {
             GUI.window.setVisible(false);
         }
 
@@ -412,8 +313,7 @@ public class MineConomy extends JavaPlugin
         IOH.log("MineConomy is disabled.", IOH.IMPORTANT);
     }
 
-    private static void load()
-    {
+    private static void load() {
         Settings.load();
         MCCom.initialize();
         MCCom.getAccounting().load();
@@ -427,8 +327,7 @@ public class MineConomy extends JavaPlugin
     /**
      * Reloads MineConomy's Resources.
      */
-    public static void reload()
-    {
+    public static void reload() {
         MCCom.getAccounting().reload();
         Banking.reload();
         Currency.reload();
@@ -439,8 +338,7 @@ public class MineConomy extends JavaPlugin
     /**
      * Saves MineConomy's Resources.
      */
-    public static void save()
-    {
+    public static void save() {
         MCCom.getAccounting().save();
         Banking.save();
         Currency.save();
@@ -451,61 +349,51 @@ public class MineConomy extends JavaPlugin
 
     /**
      * Returns the current MineConomy version.
-     * 
+     *
      * @return String
      */
-    public static String getVersion()
-    {
+    public static String getVersion() {
         return version;
     }
 
     /**
      * Returns the current plugin name.
-     * 
+     *
      * @return MineConomy
      */
-    public static String getPluginName()
-    {
+    public static String getPluginName() {
         return "MineConomy";
     }
 
     /**
      * Returns MineConomy.
-     * 
+     *
      * @return MineConomy
      */
-    public MineConomy getPlugin()
-    {
+    public MineConomy getPlugin() {
         return this;
     }
 
-    private boolean checkVersion()
-    {
+    private boolean checkVersion() {
         String v = Bukkit.getServer().getVersion();
         v = v.substring(v.length() - 20, v.length() - 16);
         int version = 0;
-        try
-        {
+        try {
             version = Integer.parseInt(v);
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             IOH.log("Found non-Bukkit server; Unable to check server version.",
                     IOH.VERY_IMPORTANT);
             bukkitVersion = "Tekkit?";
             return false;
         }
-        
+
         bukkitVersion = v;
 
-        if (version >= 2586)
-        {
+        if (version >= 2586) {
             IOH.log("Found CraftBukkit [" + v + "]. It is compatible!",
                     IOH.INFO);
             return false;
-        }
-        else
-        {
+        } else {
             IOH.log("Found CraftBukkit [" + v
                     + "]. It is not compatible! MineConomy will now disable!",
                     IOH.VERY_IMPORTANT);
