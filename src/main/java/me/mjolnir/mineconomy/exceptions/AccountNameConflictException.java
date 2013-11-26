@@ -2,44 +2,39 @@ package me.mjolnir.mineconomy.exceptions;
 
 /**
  * Thrown when two accounts have the same name.
- * 
+ *
  * @author MjolnirCommando
  */
-public class AccountNameConflictException extends RuntimeException implements MCException
-{
-	private String method;
-	private String variable;
+public class AccountNameConflictException extends RuntimeException implements MCException {
 
-	/**
-	 * Creates new AccountNameConflictException object.
-	 * 
-	 * @param method
-	 * @param variable
-	 */
-	public AccountNameConflictException(String method, String variable)
-	{
-		super();
-		this.method = method;
-		this.variable = variable;
-	}
+    private String method;
+    private String variable;
 
-	public String getMethodCause()
-	{
-		return method;
-	}
+    /**
+     * Creates new AccountNameConflictException object.
+     *
+     * @param method
+     * @param variable
+     */
+    public AccountNameConflictException(String method, String variable) {
+        super();
+        this.method = method;
+        this.variable = variable;
+    }
 
-	public String getVariableCause()
-	{
-		return variable;
-	}
+    public String getMethodCause() {
+        return method;
+    }
 
-	public String getErrorDescription()
-	{
-		return "The account name requested already belonged to an existing account.";
-	}
+    public String getVariableCause() {
+        return variable;
+    }
 
-	public AccountNameConflictException getError()
-	{
-		return this;
-	}
+    public String getErrorDescription() {
+        return "The account name requested already belonged to an existing account.";
+    }
+
+    public AccountNameConflictException getError() {
+        return this;
+    }
 }

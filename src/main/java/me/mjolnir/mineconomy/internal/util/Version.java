@@ -5,11 +5,11 @@ package me.mjolnir.mineconomy.internal.util;
  * @version 1.0
  */
 @SuppressWarnings("javadoc")
-public class Version
-{
-    private final String   stringValue;
+public class Version {
+
+    private final String stringValue;
     private final int[] value;
-    
+
     /**
      * Denotes a comparison being equal.
      */
@@ -26,8 +26,7 @@ public class Version
     /**
      * Creates new Version object.
      */
-    public Version()
-    {
+    public Version() {
         stringValue = "0.0.0";
         value = new int[3];
         value[0] = 0;
@@ -37,171 +36,144 @@ public class Version
 
     /**
      * Creates new Version object using a String.
+     *
      * @param s
      */
-    public Version(String s)
-    {
-        if (!isVersion(s))
-        {
+    public Version(String s) {
+        if (!isVersion(s)) {
             s = "0.0.0";
         }
 
         stringValue = s;
         s = s.replace(".", "-");
         String[] temp = s.split("-");
-        
+
         value = new int[temp.length];
-        
-        for (int i = 0; temp.length > i; i++)
-        {
+
+        for (int i = 0; temp.length > i; i++) {
             value[i] = Integer.parseInt(temp[i]);
         }
     }
 
     /**
      * Creates new Version object using an existing Version object.
+     *
      * @param v
      */
-    public Version(Version v)
-    {
+    public Version(Version v) {
         this.stringValue = v.stringValue;
         this.value = v.value;
     }
 
     /**
      * Returns true if String can be converted to a Version.
+     *
      * @param s
      * @return
      */
-    public boolean isVersion(String s)
-    {
+    public boolean isVersion(String s) {
         char[] c = s.toCharArray();
-        for (int i = 0; i < s.length(); i++)
-        {
-            if (c[i] != '.')
-            {
-                if (!Character.isDigit(c[i]))
-                {
+        for (int i = 0; i < s.length(); i++) {
+            if (c[i] != '.') {
+                if (!Character.isDigit(c[i])) {
                     return false;
                 }
             }
         }
         return true;
     }
-    
+
     /**
      * Compares this Version to Version.
+     *
      * @param v
      * @return
      */
-    public int compare(Version v)
-    {
+    public int compare(Version v) {
         return compare(this, v);
     }
-    
+
     /**
      * Compares Version 1 to Version 2.
+     *
      * @param v1
      * @param v2
      * @return
      */
-    public static int compare(Version v1, Version v2)
-    {
-        if (v1.equals(v2))
-        {
+    public static int compare(Version v1, Version v2) {
+        if (v1.equals(v2)) {
             return EQUAL;
-        }
-        else
-        {
-            if (v1.isNewer(v2))
-            {
+        } else {
+            if (v1.isNewer(v2)) {
                 return NEWER;
-            }
-            else
-            {
+            } else {
                 return OLDER;
             }
         }
     }
-    
+
     /**
      * Returns true if this Version is newer than Version.
+     *
      * @param v
      * @return
      */
-    public boolean isNewer(Version v)
-    {
+    public boolean isNewer(Version v) {
         return isNewer(this, v);
     }
-    
+
     /**
      * Returns true if Version is newer than Version 2.
+     *
      * @param v
      * @param v2
      * @return
      */
-    public static boolean isNewer(Version v, Version v2)
-    {
+    public static boolean isNewer(Version v, Version v2) {
         int[] value = v.value;
         int[] value1 = v2.value;
-        
-        if (value.length < value1.length)
-        {
-            for (int i = 0; value.length > i; i++)
-            {
-                if (value[i] > value1[i])
-                {
+
+        if (value.length < value1.length) {
+            for (int i = 0; value.length > i; i++) {
+                if (value[i] > value1[i]) {
                     return true;
                 }
             }
-            
+
             return false;
-        }
-        else
-        {
-            for (int i = 0; value1.length > i; i++)
-            {
-                if (value1[i] > value[i])
-                {
+        } else {
+            for (int i = 0; value1.length > i; i++) {
+                if (value1[i] > value[i]) {
                     return false;
                 }
             }
-            
+
             return true;
         }
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return stringValue;
     }
-    
+
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof Version)
-        {
+    public boolean equals(Object obj) {
+        if (obj instanceof Version) {
             Version v = (Version) obj;
-            
-            if (v.stringValue.equals(this.stringValue))
-            {
+
+            if (v.stringValue.equals(this.stringValue)) {
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
-    
+
     @Override
-    public Object clone()
-    {
+    public Object clone() {
         return new Version(this);
     }
 }

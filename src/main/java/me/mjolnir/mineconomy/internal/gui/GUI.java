@@ -23,7 +23,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Scanner;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -40,9 +39,6 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import org.bukkit.Bukkit;
-
 import me.mjolnir.mineconomy.MineConomy;
 import me.mjolnir.mineconomy.internal.Currency;
 import me.mjolnir.mineconomy.internal.MCCom;
@@ -63,105 +59,96 @@ import me.mjolnir.mineconomy.internal.gui.listeners.SetListener;
 import me.mjolnir.mineconomy.internal.gui.listeners.TakeListener;
 import me.mjolnir.mineconomy.internal.util.IOH;
 import me.mjolnir.mineconomy.internal.util.Update;
+import org.bukkit.Bukkit;
 
 /**
  * Handles MineConomy GUI.
- * 
+ *
  * @author MjolnirCommando
  */
 @SuppressWarnings("javadoc")
-public class GUI
-{
-    public static JFrame                    window;
-    public static JPanel                    accounts;
-    public static JPanel                    settings;
-    public static JPanel                    banks;
-    public static JTabbedPane               tabs;
-    public static JPanel                    currencies;
-    public static JPanel                    content;
-    private static JPanel                   pane1;
-    public static JLabel                    title;
-    public static JComboBox                 accountList;
-    public static ArrayList<String>         accountNames;
+public class GUI {
+
+    public static JFrame window;
+    public static JPanel accounts;
+    public static JPanel settings;
+    public static JPanel banks;
+    public static JTabbedPane tabs;
+    public static JPanel currencies;
+    public static JPanel content;
+    private static JPanel pane1;
+    public static JLabel title;
+    public static JComboBox accountList;
+    public static ArrayList<String> accountNames;
     public static Hashtable<String, Double> accountBalances;
-    public static JLabel                    balance;
-    public static boolean                   accountSelected;
-    public static String                    selectedAccount;
-    public static JButton                   cfubutton;
-    public static JButton                   quitbutton;
-    public static JButton                   refreshbutton;
-    public static JTextField                amount;
-    public static JTextField                newaccount;
-    public static JButton                   givebutton;
-    public static JButton                   takebutton;
-    public static JButton                   helpbutton;
-    public static JButton                   createbutton;
-    public static JButton                   setbutton;
-    public static JButton                   emptybutton;
-    public static JButton                   deletebutton;
-    public static JButton                   refreshbutton2;
-    public static JTextArea                 logtext;
-    
-    private static final String             consoleversion = "4.0";
+    public static JLabel balance;
+    public static boolean accountSelected;
+    public static String selectedAccount;
+    public static JButton cfubutton;
+    public static JButton quitbutton;
+    public static JButton refreshbutton;
+    public static JTextField amount;
+    public static JTextField newaccount;
+    public static JButton givebutton;
+    public static JButton takebutton;
+    public static JButton helpbutton;
+    public static JButton createbutton;
+    public static JButton setbutton;
+    public static JButton emptybutton;
+    public static JButton deletebutton;
+    public static JButton refreshbutton2;
+    public static JTextArea logtext;
+
+    private static final String consoleversion = "4.0";
 
     /**
      * Creates new GUI object.
      */
-    public GUI()
-    {
+    public GUI() {
         create();
     }
 
-    private static void create()
-    {
+    private static void create() {
         accountSelected = false;
 
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        window.addComponentListener(new ComponentListener()
-        {
-            public void componentResized(ComponentEvent e)
-            {
+        window.addComponentListener(new ComponentListener() {
+            public void componentResized(ComponentEvent e) {
                 int width = window.getWidth();
                 int height = window.getHeight();
                 boolean resize = false;
-                if (width < 850)
-                {
+                if (width < 850) {
                     resize = true;
                     width = 850;
                 }
-                if (height < 500)
-                {
+                if (height < 500) {
                     resize = true;
                     height = 500;
                 }
-                if (resize)
-                {
+                if (resize) {
                     window.setSize(width, height);
                 }
             }
 
-            public void componentMoved(ComponentEvent e)
-            {
+            public void componentMoved(ComponentEvent e) {
             }
 
-            public void componentShown(ComponentEvent e)
-            {
+            public void componentShown(ComponentEvent e) {
             }
 
-            public void componentHidden(ComponentEvent e)
-            {
+            public void componentHidden(ComponentEvent e) {
             }
         });
         window.setTitle("MineConomy - GUI");
 
         tabs = new JTabbedPane();
-        
+
         content = new JPanel();
         content.setLayout(new BorderLayout());
-        
+
         window.setContentPane(content);
-        
+
         createAccounts();
         createCurrencies();
         createBanks();
@@ -183,7 +170,7 @@ public class GUI
         refreshbutton = new JButton("Reload Server");
         refreshbutton.addActionListener(new RefreshListener());
         pane3EastFlow.add(refreshbutton);
-        
+
         refreshbutton2 = new JButton("Reload MineConomy");
         refreshbutton2.addActionListener(new Refresh2Listener());
         pane3EastFlow.add(refreshbutton2);
@@ -210,9 +197,8 @@ public class GUI
         window.setLocationRelativeTo(null);
         window.setVisible(true);
     }
-    
-    private static void createAccounts()
-    {
+
+    private static void createAccounts() {
         accounts = new JPanel();
         accounts.setLayout(new BorderLayout());
         JScrollPane accountsScroll = new JScrollPane(accounts);
@@ -223,12 +209,9 @@ public class GUI
 
         title = new JLabel();
 
-        if (Update.check())
-        {
+        if (Update.check()) {
             title.setText("<html><center>Control Panel<br><span style=\"color:blue;\">Updates Available!</span><br><br></center></html>");
-        }
-        else
-        {
+        } else {
             title.setText("<html><center>Control Panel<br><br><br></center></html>");
         }
 
@@ -320,30 +303,25 @@ public class GUI
         logopane.add(logo);
         pane2.add(logopane);
     }
-    
-    private static void createCurrencies()
-    {
+
+    private static void createCurrencies() {
         currencies = new JPanel();
 
         currencies.setLayout(new BorderLayout());
 
         StringBuffer sb = new StringBuffer();
 
-        try
-        {
+        try {
             Scanner in = new Scanner(new File(MineConomy.maindir
                     + "currencies.yml"));
 
-            while (in.hasNextLine())
-            {
+            while (in.hasNextLine()) {
                 sb.append(in.nextLine() + "\n");
             }
             sb.replace(sb.length() - 1, sb.length(), "");
 
             in.close();
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             IOH.error("FileNotFoundException", e);
         }
 
@@ -356,29 +334,24 @@ public class GUI
 
         JButton button = new JButton("Save");
 
-        button.addActionListener(new ActionListener()
-        {
+        button.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
                 PrintWriter out;
-                try
-                {
+                try {
                     out = new PrintWriter(new File(MineConomy.maindir
                             + "currencies.yml"));
 
                     out.print(currencyText.getText());
 
                     out.close();
-                }
-                catch (FileNotFoundException e)
-                {
+                } catch (FileNotFoundException e) {
                     IOH.error("FileNotFoundException", e);
                 }
 
                 Currency.reload();
-                
+
                 JOptionPane.showMessageDialog(window, "Currency File has been saved.", "MineConomy - Save Complete", JOptionPane.PLAIN_MESSAGE);
             }
 
@@ -389,50 +362,49 @@ public class GUI
         buttonflow.add(button);
 
         currencies.add(buttonflow, BorderLayout.SOUTH);
-        
+
         tabs.addTab("Currencies", currencies);
     }
-    
-    private static void createBanks()
-    {
+
+    private static void createBanks() {
         banks = new JPanel();
-        
+
         banks.setLayout(new BoxLayout(banks, BoxLayout.Y_AXIS));
-        
+
         JPanel labelflow = new JPanel();
         labelflow.setLayout(new FlowLayout());
         labelflow.add(new JLabel("<html><span style=\"color:red;\">BANK GUI NOT YET IMPLEMENTED. TRY USING THE IN-GAME COMMANDS. SORRY FOR THE INCONVIENCE</span></html>"));
-        
+
         banks.add(labelflow);
-        
+
 //        StringBuffer sb = new StringBuffer();
-//        
+//
 //        try
 //        {
 //            Scanner in = new Scanner(new File(MineConomy.maindir + "banks.yml"));
-//            
+//
 //            while(in.hasNextLine())
 //            {
 //                sb.append(in.nextLine() + "\n");
 //            }
 //            sb.replace(sb.length() - 1, sb.length(), "");
-//            
+//
 //            in.close();
 //        }
 //        catch (FileNotFoundException e)
 //        {
 //            IOH.error("", e);
 //        }
-//        
+//
 //        final JTextArea bankEdit = new JTextArea(sb.toString());
-//        
+//
 //        JScrollPane bankEditScroll = new JScrollPane(bankEdit);
 //        bankEditScroll.setPreferredSize(new Dimension(750, 500));
-//        
+//
 //        banks.add(bankEditScroll);
-//        
+//
 //        JButton button = new JButton("Save");
-//        
+//
 //        button.addActionListener(new ActionListener() {
 //
 //            @Override
@@ -442,590 +414,557 @@ public class GUI
 //                try
 //                {
 //                    out = new PrintWriter(new File(MineConomy.maindir + "banks.yml"));
-//                    
+//
 //                    out.print(bankEdit.getText());
-//                    
+//
 //                    out.close();
 //                }
 //                catch (FileNotFoundException e)
 //                {
 //                    IOH.error("", e);
 //                }
-//                
+//
 //                Banking.reload();
 //            }
-//            
+//
 //        });
-//        
+//
 //        JPanel buttonflow = new JPanel();
 //        buttonflow.setLayout(new FlowLayout());
 //        buttonflow.add(button);
-//        
+//
 //        banks.add(buttonflow);
-//        
+//
 //        JScrollPane banksScroll = new JScrollPane(banks);
-        
 //        tabs.addTab("Banks", banksScroll); TODO
     }
-    
-    private static void createSettings()
-    {
+
+    private static void createSettings() {
         settings = new JPanel();
-        
+
         settings.setLayout(new FlowLayout());
-        
+
         JPanel settingscontent = new JPanel();
-        
+
         settingscontent.setLayout(new BoxLayout(settingscontent, BoxLayout.Y_AXIS));
-        
+
         JPanel titleflow = new JPanel();
         titleflow.setLayout(new FlowLayout());
-        
+
         titleflow.add(new JLabel("Settings"));
-        
+
         settingscontent.add(titleflow);
         settingscontent.add(new JLabel(" "));
-        
+
         final JPanel settings1 = new JPanel();
         settings1.setLayout(new BoxLayout(settings1, BoxLayout.X_AXIS));
-        
+
         settings1.add(new JLabel("Starting Balance: "));
-        
+
         double starting = 9999999.99D;
-        
-        if (Settings.startingBalance > starting)
-        {
+
+        if (Settings.startingBalance > starting) {
             starting = Settings.startingBalance;
         }
-        
+
         final JSpinner startingField = new JSpinner(new SpinnerNumberModel(Settings.startingBalance,
                 0.00,
                 starting,
                 1));
-        
+
         settings1.add(startingField);
-        
+
         settingscontent.add(settings1);
-        
+
         JPanel settings2 = new JPanel();
         settings2.setLayout(new BoxLayout(settings2, BoxLayout.X_AXIS));
-        
+
         settings2.add(new JLabel("Max Debt: "));
-        
+
         double maxdebt = 9999999.99D;
-        
-        if (Settings.maxDebt > maxdebt)
-        {
+
+        if (Settings.maxDebt > maxdebt) {
             maxdebt = Settings.maxDebt;
         }
-        
+
         final JSpinner maxDebtField = new JSpinner(new SpinnerNumberModel(Settings.maxDebt,
                 0.00,
                 maxdebt,
                 1));
-        
+
         settings2.add(maxDebtField);
-        
+
         settingscontent.add(settings2);
-        
+
         settingscontent.add(new JLabel(" "));
-        
+
         JPanel settings19 = new JPanel();
         settings19.setLayout(new BoxLayout(settings19, BoxLayout.X_AXIS));
-        
+
         settings19.add(new JLabel("Display GUI: "));
-        
-        final JComboBox guiBox = new JComboBox(new String[] {"true", "false"});
-        
+
+        final JComboBox guiBox = new JComboBox(new String[]{"true", "false"});
+
         guiBox.setSelectedItem(Settings.gui + "");
-        
+
         settings19.add(guiBox);
-        
+
         settingscontent.add(settings19);
-        
+
         JPanel settings20 = new JPanel();
         settings20.setLayout(new BoxLayout(settings20, BoxLayout.X_AXIS));
-        
+
         settings20.add(new JLabel("Warn Ops: "));
-        
-        final JComboBox opsBox = new JComboBox(new String[] {"true", "false"});
-        
+
+        final JComboBox opsBox = new JComboBox(new String[]{"true", "false"});
+
         opsBox.setSelectedItem(Settings.ops + "");
-        
+
         settings20.add(opsBox);
-        
+
         settingscontent.add(settings20);
-        
+
         JPanel settings10 = new JPanel();
         settings10.setLayout(new BoxLayout(settings10, BoxLayout.X_AXIS));
-        
+
         settings10.add(new JLabel("Log Priority: "));
-        
+
         final JLabel prilabel = new JLabel(Settings.logPriority + "");
-        
+
         final JSlider prislide = new JSlider(0, 5, Settings.logPriority);
         prislide.addChangeListener(new ChangeListener() {
 
             @Override
-            public void stateChanged(ChangeEvent arg0)
-            {
+            public void stateChanged(ChangeEvent arg0) {
                 prilabel.setText(prislide.getValue() + "");
             }
-            
+
         });
-        
+
         settings10.add(prislide);
-        
+
         settings10.add(prilabel);
-        
+
         settingscontent.add(settings10);
-        
+
         settingscontent.add(new JLabel(" "));
-        
+
         JPanel settings3 = new JPanel();
         settings3.setLayout(new BoxLayout(settings3, BoxLayout.X_AXIS));
-        
+
         settings3.add(new JLabel("Interest Amount: "));
-        
+
         double iamount = 9999999.99D;
-        
-        if (Settings.interestAmount > iamount)
-        {
+
+        if (Settings.interestAmount > iamount) {
             iamount = Settings.interestAmount;
         }
-        
+
         final JSpinner interestAmount = new JSpinner(new SpinnerNumberModel(Settings.interestAmount,
                 0.00,
                 iamount,
                 1));
-        
+
         settings3.add(interestAmount);
-        
+
         settingscontent.add(settings3);
-        
+
         JPanel settings4 = new JPanel();
         settings4.setLayout(new BoxLayout(settings4, BoxLayout.X_AXIS));
-        
+
         settings4.add(new JLabel("Interest Interval (Seconds): "));
-        
+
         double iinterval = 100000D;
-        
-        if (Settings.interestInterval > iinterval)
-        {
+
+        if (Settings.interestInterval > iinterval) {
             iinterval = Settings.interestInterval;
         }
-        
+
         final JSpinner interestInterval = new JSpinner(new SpinnerNumberModel(Settings.interestInterval,
                 0,
                 iinterval,
                 1));
-        
+
         settings4.add(interestInterval);
-        
+
         settingscontent.add(settings4);
-        
+
         JPanel settings5 = new JPanel();
-        
+
         settings5.setLayout(new BoxLayout(settings5, BoxLayout.X_AXIS));
-        
+
         settings5.add(new JLabel("Interest Mode: "));
-        
+
         String[] comboModel = {"None", "Fixed", "Percent"};
-        
+
         final JComboBox interestMode = new JComboBox(comboModel);
-        
+
         String mode = Settings.interestMode;
-        
-        if (mode.equalsIgnoreCase("Fixed"))
-        {
+
+        if (mode.equalsIgnoreCase("Fixed")) {
             interestMode.setSelectedIndex(1);
-        }
-        else if (mode.equalsIgnoreCase("Percent"))
-        {
+        } else if (mode.equalsIgnoreCase("Percent")) {
             interestMode.setSelectedIndex(2);
-        }
-        else
-        {
+        } else {
             interestMode.setSelectedIndex(0);
         }
-        
+
         settings5.add(interestMode);
-        
+
         settingscontent.add(settings5);
-        
+
         settingscontent.add(new JLabel(" "));
-        
+
         JPanel settings6 = new JPanel();
         settings6.setLayout(new BoxLayout(settings6, BoxLayout.X_AXIS));
-        
+
         settings6.add(new JLabel("Tax Amount: "));
-        
+
         double tamount = 9999999.99D;
-        
-        if (Settings.taxAmount > tamount)
-        {
+
+        if (Settings.taxAmount > tamount) {
             tamount = Settings.taxAmount;
         }
-        
+
         final JSpinner taxAmount = new JSpinner(new SpinnerNumberModel(Settings.taxAmount,
                 0.00,
                 tamount,
                 1));
-        
+
         settings6.add(taxAmount);
-        
+
         settingscontent.add(settings6);
-        
+
         JPanel settings7 = new JPanel();
         settings7.setLayout(new BoxLayout(settings7, BoxLayout.X_AXIS));
-        
+
         settings7.add(new JLabel("Tax Interval (Seconds): "));
-        
+
         double tinterval = 100000D;
-        
-        if (Settings.taxInterval > tinterval)
-        {
+
+        if (Settings.taxInterval > tinterval) {
             tinterval = Settings.taxInterval;
         }
-        
+
         final JSpinner taxInterval = new JSpinner(new SpinnerNumberModel(Settings.taxInterval,
                 0,
                 tinterval,
                 1));
-        
+
         settings7.add(taxInterval);
-        
+
         settingscontent.add(settings7);
-        
+
         JPanel settings8 = new JPanel();
-        
+
         settings8.setLayout(new BoxLayout(settings8, BoxLayout.X_AXIS));
-        
+
         settings8.add(new JLabel("Tax Mode: "));
-        
+
         final JComboBox taxMode = new JComboBox(comboModel);
-        
+
         mode = Settings.taxMode;
-        
-        if (mode.equalsIgnoreCase("Fixed"))
-        {
+
+        if (mode.equalsIgnoreCase("Fixed")) {
             taxMode.setSelectedIndex(1);
-        }
-        else if (mode.equalsIgnoreCase("Percent"))
-        {
+        } else if (mode.equalsIgnoreCase("Percent")) {
             taxMode.setSelectedIndex(2);
-        }
-        else
-        {
+        } else {
             taxMode.setSelectedIndex(0);
         }
-        
+
         settings8.add(taxMode);
-        
+
         settingscontent.add(settings8);
-        
+
         settingscontent.add(new JLabel(" "));
-        
+
         JPanel settings9 = new JPanel();
-        
+
         settings9.setLayout(new BoxLayout(settings9, BoxLayout.X_AXIS));
-        
+
         settings9.add(new JLabel("Language: "));
-        
+
         final JTextField lang = new JTextField(Settings.lang, 10);
-        
+
         settings9.add(lang);
-        
+
         settingscontent.add(settings9);
-        
+
         JPanel settings11 = new JPanel();
-        
+
         settings11.setLayout(new BoxLayout(settings11, BoxLayout.X_AXIS));
-        
+
         settings11.add(new JLabel("Auto-Save Interval (Seconds): "));
-        
+
         double ainterval = 100000D;
-        
-        if (Settings.autosaveInterval > ainterval)
-        {
+
+        if (Settings.autosaveInterval > ainterval) {
             ainterval = Settings.autosaveInterval;
         }
-        
+
         final JSpinner autosaveInterval = new JSpinner(new SpinnerNumberModel(Settings.autosaveInterval,
                 0,
                 ainterval,
                 1));
-        
+
         settings11.add(autosaveInterval);
-        
+
         settingscontent.add(settings11);
-        
+
         JPanel settings12 = new JPanel();
-        
+
         settings12.add(new JLabel("iConomy Compatibility Mode: "));
-        
+
         settings12.setLayout(new BoxLayout(settings12, BoxLayout.X_AXIS));
-        
-        final JComboBox compatBox = new JComboBox(new String[] {"true", "false"});
-        
+
+        final JComboBox compatBox = new JComboBox(new String[]{"true", "false"});
+
         compatBox.setSelectedItem(Settings.iconomy + "");
-        
+
         settings12.add(compatBox);
-        
+
         settingscontent.add(settings12);
-        
+
         JPanel settings13 = new JPanel();
-        
+
         settings13.add(new JLabel("Migration Mode: "));
-        
+
         settings13.setLayout(new BoxLayout(settings13, BoxLayout.X_AXIS));
-        
-        final JComboBox migrateBox = new JComboBox(new String[] {"none", "iconomy", "mysql"});
-        
+
+        final JComboBox migrateBox = new JComboBox(new String[]{"none", "iconomy", "mysql"});
+
         migrateBox.setSelectedItem(Settings.migrate + "");
-        
+
         settings13.add(migrateBox);
-        
+
         settingscontent.add(settings13);
-        
+
         settingscontent.add(new JLabel(" "));
-        
+
         settingscontent.add(new JLabel("Database:"));
-        
+
         JPanel settings14 = new JPanel();
-        
+
         settings14.setLayout(new BoxLayout(settings14, BoxLayout.X_AXIS));
-        
+
         settings14.add(new JLabel("URL: "));
-        
+
         final JTextField urlField = new JTextField(Settings.dburl, 10);
-        
+
         settings14.add(urlField);
-        
+
         settingscontent.add(settings14);
-        
+
         JPanel settings15 = new JPanel();
-        
+
         settings15.setLayout(new BoxLayout(settings15, BoxLayout.X_AXIS));
-        
+
         settings15.add(new JLabel("Name: "));
-        
+
         final JTextField nameField = new JTextField(Settings.dbname, 10);
-        
+
         settings15.add(nameField);
-        
+
         settingscontent.add(settings15);
-        
+
         JPanel settings16 = new JPanel();
-        
+
         settings16.setLayout(new BoxLayout(settings16, BoxLayout.X_AXIS));
-        
+
         settings16.add(new JLabel("Username: "));
-        
+
         final JTextField userField = new JTextField(Settings.dbuser, 10);
-        
+
         settings16.add(userField);
-        
+
         settingscontent.add(settings16);
-        
+
         JPanel settings17 = new JPanel();
-        
+
         settings17.setLayout(new BoxLayout(settings17, BoxLayout.X_AXIS));
-        
+
         settings17.add(new JLabel("Password: "));
-        
+
         final JTextField passField = new JTextField(Settings.dbpass, 10);
-        
+
         settings17.add(passField);
-        
+
         settingscontent.add(settings17);
-        
+
         JPanel settings18 = new JPanel();
-        
+
         settings18.setLayout(new BoxLayout(settings18, BoxLayout.X_AXIS));
-        
+
         settings18.add(new JLabel("Type: "));
-        
-        final JComboBox typeField = new JComboBox(new String[] {"none", "mysql"});
-        
+
+        final JComboBox typeField = new JComboBox(new String[]{"none", "mysql"});
+
         typeField.setSelectedItem(Settings.dbtype);
-        
+
         settings18.add(typeField);
-        
+
         settingscontent.add(settings18);
-        
+
         settingscontent.add(new JLabel(" "));
         settingscontent.add(new JLabel(" "));
-        
+
         JPanel buttonflow = new JPanel();
         buttonflow.setLayout(new FlowLayout());
-        
+
         JButton save = new JButton("Save");
         save.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
                 Settings.startingBalance = Double.parseDouble(startingField.getValue() + "");
-                
+
                 Settings.maxDebt = Double.parseDouble(maxDebtField.getValue() + "");
-                
+
                 Settings.interestAmount = Double.parseDouble(interestAmount.getValue() + "");
                 Settings.interestInterval = Integer.parseInt((interestInterval.getValue() + "").replace(".", "-").split("-")[0]);
                 Settings.interestMode = interestMode.getSelectedItem().toString();
-                
+
                 Settings.taxAmount = Double.parseDouble(taxAmount.getValue() + "");
                 Settings.taxInterval = Integer.parseInt((taxInterval.getValue() + "").replace(".", "-").split("-")[0]);
                 Settings.taxMode = taxMode.getSelectedItem().toString();
-                
+
                 Settings.lang = lang.getText();
-                
+
                 Settings.logPriority = prislide.getValue();
                 Settings.gui = Boolean.parseBoolean((String) guiBox.getSelectedItem());
                 Settings.ops = Boolean.parseBoolean((String) opsBox.getSelectedItem());
-                
+
                 Settings.autosaveInterval = Integer.parseInt((autosaveInterval.getValue() + "").replace(".", "-").split("-")[0]);
                 Settings.iconomy = Boolean.parseBoolean((String) compatBox.getSelectedItem());
                 Settings.migrate = (String) migrateBox.getSelectedItem();
-                
+
                 Settings.dburl = urlField.getText();
                 Settings.dbname = nameField.getText();
                 Settings.dbuser = userField.getText();
                 Settings.dbpass = passField.getText();
                 Settings.dbtype = (String) typeField.getSelectedItem();
-                
+
                 Settings.save();
-                
+
                 JOptionPane.showMessageDialog(window, "Configuration File has been saved.", "MineConomy - Save Complete", JOptionPane.PLAIN_MESSAGE);
             }
-            
+
         });
         buttonflow.add(save);
-        
+
         settingscontent.add(buttonflow);
-        
+
         settingscontent.add(new JLabel(" "));
-        
+
         JPanel labelflow = new JPanel();
         labelflow.setLayout(new FlowLayout());
         labelflow.add(new JLabel("<html><span style=\"color:red;\">Some Changes May Require Server Reload.</span></html>"));
-        
+
         settingscontent.add(labelflow);
-        
+
         settings.add(settingscontent);
-        
+
         JScrollPane settingsScroll = new JScrollPane(settings);
-        
+
         settingsScroll.setPreferredSize(new Dimension(750, 500));
-        
+
         tabs.addTab("Settings", settingsScroll);
     }
-    
-    private static void createLang()
-    {
+
+    private static void createLang() {
         JPanel lang = new JPanel();
         lang.setLayout(new BorderLayout());
-        
+
         final JTextArea langtext = new JTextArea();
-        
-        try
-        {
+
+        try {
             Scanner in = new Scanner(MCLang.langFile);
-            
-            while (in.hasNextLine())
-            {
+
+            while (in.hasNextLine()) {
                 langtext.append(in.nextLine() + "\n");
             }
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             IOH.error("FileNotFoundException", e);
         }
-        
+
         JScrollPane langscroll = new JScrollPane(langtext);
         langscroll.setPreferredSize(new Dimension(750, 500));
         lang.add(langscroll, BorderLayout.CENTER);
-        
+
         JPanel langflow = new JPanel();
         langflow.setLayout(new FlowLayout());
-        
+
         JButton savelang = new JButton("Save");
-        
-        savelang.addActionListener(new ActionListener(){
-            
+
+        savelang.addActionListener(new ActionListener() {
+
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
-                try
-                {
+            public void actionPerformed(ActionEvent arg0) {
+                try {
                     PrintWriter out = new PrintWriter(MCLang.langFile);
                     out.print(langtext.getText());
                     out.close();
-                }
-                catch (FileNotFoundException e)
-                {
+                } catch (FileNotFoundException e) {
                     IOH.error("FileNotFoundException", e);
                 }
-                
+
                 MCLang.reload();
-                
+
                 JOptionPane.showMessageDialog(window, "Language File has been saved.", "MineConomy - Save Complete", JOptionPane.PLAIN_MESSAGE);
             }
-            
+
         });
-        
+
         langflow.add(savelang);
-        
+
         lang.add(langflow, BorderLayout.SOUTH);
-        
+
         tabs.addTab("Language", lang);
     }
-    
-    private static void createLog()
-    {
+
+    private static void createLog() {
         IOH.gui = true;
         JPanel log = new JPanel();
         log.setLayout(new BorderLayout());
-        
+
         logtext = new JTextArea();
         logtext.setFont(new Font("monospace", Font.PLAIN, 12));
         logtext.setLineWrap(false);
         logtext.setEditable(false);
         IOH.updateGUILog();
-        
+
         JScrollPane logscroll = new JScrollPane(logtext);
         logscroll.setPreferredSize(new Dimension(750, 500));
-        
+
         log.add(logscroll, BorderLayout.CENTER);
-        
+
         JPanel bflow1 = new JPanel();
         bflow1.setLayout(new FlowLayout());
-        
+
         JButton clearlog = new JButton("Clear Log");
         clearlog.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
                 IOH.clearLog();
             }
-            
+
         });
         bflow1.add(clearlog);
-        
+
         log.add(bflow1, BorderLayout.SOUTH);
-        
+
         tabs.addTab("Log", log);
     }
-    
-    private static void createInfo()
-    {
+
+    private static void createInfo() {
         JPanel info = new JPanel();
         info.setLayout(new BorderLayout());
-        
+
         JPanel vinfo = new JPanel();
         vinfo.setLayout(new GridLayout(7, 2));
-        
+
         vinfo.add(new JLabel("MineConomy Version:"));
         vinfo.add(new JLabel(MineConomy.getVersion()));
         vinfo.add(new JLabel(""));
@@ -1040,68 +979,60 @@ public class GUI
         vinfo.add(new JLabel(""));
         vinfo.add(new JLabel("GUI Version:"));
         vinfo.add(new JLabel(consoleversion));
-        
+
         JPanel infocontain = new JPanel();
         infocontain.setLayout(new BoxLayout(infocontain, BoxLayout.Y_AXIS));
-        
+
         infocontain.add(vinfo);
-        
+
         JPanel changeflow = new JPanel();
         changeflow.setLayout(new FlowLayout());
-        
+
         Scanner in = new Scanner(new BufferedReader(new InputStreamReader(
                 Settings.class.getClassLoader().getResourceAsStream(
                         "me/mjolnir/mineconomy/dev/change_log.txt"))));
         StringBuffer sb = new StringBuffer();
         sb.append("<html><br><br><br>=== Change Log ===<br><br>");
-        while (in.hasNextLine())
-        {
+        while (in.hasNextLine()) {
             sb.append(in.nextLine() + "<br>");
         }
         sb.append("</html>");
         changeflow.add(new JLabel(sb.toString()));
-        
+
         infocontain.add(changeflow);
-        
+
         JScrollPane infoscroll = new JScrollPane(infocontain);
         infoscroll.setPreferredSize(new Dimension(750, 500));
         info.add(infoscroll, BorderLayout.CENTER);
-        
+
         JPanel infobuttonflow = new JPanel();
         JButton ticket = new JButton("File a Support Ticket");
         ticket.addActionListener(new ActionListener() {
-            
+
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
-                try
-                {
+            public void actionPerformed(ActionEvent arg0) {
+                try {
                     Desktop.getDesktop().browse(new URI("http://dev.bukkit.org/server-mods/mineconomy/create-ticket/"));
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     IOH.error("IOException", e);
-                }
-                catch (URISyntaxException e)
-                {
+                } catch (URISyntaxException e) {
                     IOH.error("URISyntaxException", e);
                 }
             }
-            
+
         });
         infobuttonflow.add(ticket);
         info.add(infobuttonflow, BorderLayout.SOUTH);
-        
+
         tabs.addTab("Info", info);
     }
-    
-    public static void error(String text)
-    {
+
+    public static void error(String text) {
         final JFrame error = new JFrame("MineConomy - Error Report");
-        
+
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        
+
         JPanel messageFlow = new JPanel();
         messageFlow.setLayout(new FlowLayout());
         JLabel errorlabel = new JLabel("<html><center>MineConomy has encountered this error.<br>"
@@ -1111,168 +1042,139 @@ public class GUI
         errorlabel.addMouseListener(new MouseListener() {
 
             @Override
-            public void mouseClicked(MouseEvent arg0)
-            {
-                try
-                {
+            public void mouseClicked(MouseEvent arg0) {
+                try {
                     Desktop.getDesktop().browse(new URI("http://dev.bukkit.org/server-mods/mineconomy"));
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     IOH.error("IOException", e);
-                }
-                catch (URISyntaxException e)
-                {
+                } catch (URISyntaxException e) {
                     IOH.error("URISyntaxException", e);
                 }
             }
 
             @Override
-            public void mouseEntered(MouseEvent arg0)
-            {
+            public void mouseEntered(MouseEvent arg0) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
-            public void mouseExited(MouseEvent arg0)
-            {
+            public void mouseExited(MouseEvent arg0) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
-            public void mousePressed(MouseEvent arg0)
-            {
+            public void mousePressed(MouseEvent arg0) {
                 // TODO Auto-generated method stub
-                
+
             }
 
             @Override
-            public void mouseReleased(MouseEvent arg0)
-            {
+            public void mouseReleased(MouseEvent arg0) {
                 // TODO Auto-generated method stub
-                
+
             }
-            
+
         });
         messageFlow.add(errorlabel);
         panel.add(messageFlow);
-        
+
         JTextArea pane = new JTextArea();
-        
+
         pane.setText(text);
         pane.setLineWrap(false);
         pane.setEditable(false);
-        
+
         JScrollPane paneScroll = new JScrollPane(pane);
         paneScroll.setPreferredSize(new Dimension(500, 300));
-        
+
         panel.add(paneScroll);
-        
+
         JPanel buttonFlow = new JPanel();
         buttonFlow.setLayout(new FlowLayout());
-        
+
         JButton close = new JButton("Close");
         close.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
+            public void actionPerformed(ActionEvent arg0) {
                 error.setVisible(false);
                 error.dispose();
             }
-            
+
         });
         buttonFlow.add(close);
-        
+
         panel.add(buttonFlow);
-        
+
         JButton report = new JButton("Report");
         report.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent arg0)
-            {
-                try
-                {
+            public void actionPerformed(ActionEvent arg0) {
+                try {
                     Desktop.getDesktop().browse(new URI("http://dev.bukkit.org/server-mods/mineconomy/create-ticket/"));
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     IOH.error("IOException", e);
-                }
-                catch (URISyntaxException e)
-                {
+                } catch (URISyntaxException e) {
                     IOH.error("URISyntaxException", e);
                 }
             }
-            
+
         });
         buttonFlow.add(report);
-        
+
         pane.select(0, 0);
-        
+
         error.add(panel);
         error.pack();
         error.setLocationRelativeTo(window);
         error.setVisible(true);
     }
-    
-    public static void reloadAccounts(boolean update)
-    {
+
+    public static void reloadAccounts(boolean update) {
         MCCom.getAccounting().save();
-        
+
         int j = 0;
-        
-        try
-        {
+
+        try {
             j = accountList.getSelectedIndex();
             pane1.remove(accountList);
-        }
-        catch (NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             j = 0;
         }
-        
+
         accountBalances = new Hashtable<String, Double>();
-        
+
         accountNames = MCCom.getAccounts();
-        for (int i = 0; accountNames.size() > i; i++)
-        {
+        for (int i = 0; accountNames.size() > i; i++) {
             accountBalances.put(accountNames.get(i),
                     MCCom.getBalance(accountNames.get(i)));
         }
 
         accountList = new JComboBox(accountNames.toArray());
-        try
-        {
+        try {
             accountList.setSelectedIndex(j);
-        }
-        catch (IllegalArgumentException e)
-        {
-            try
-            {
+        } catch (IllegalArgumentException e) {
+            try {
                 accountList.setSelectedIndex(j - 1);
-            }
-            catch (IllegalArgumentException e1)
-            {
+            } catch (IllegalArgumentException e1) {
                 accountList.insertItemAt("Accounts ---", 0);
                 accountList.setSelectedIndex(0);
             }
         }
-        
-        if (update)
-        {
+
+        if (update) {
             JFrame oldWindow = window;
             new GUI();
             oldWindow.setVisible(false);
         }
-        
+
         accountList.addActionListener(new AccountListListener());
-        
+
         pane1.add(accountList);
-        
+
         accountList.repaint();
     }
 }

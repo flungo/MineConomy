@@ -2,29 +2,27 @@ package me.mjolnir.mineconomy.internal;
 
 import java.io.File;
 import java.io.IOException;
-
 import me.mjolnir.mineconomy.MineConomy;
 import me.mjolnir.mineconomy.internal.util.IOH;
 import me.mjolnir.mineconomy.internal.util.MCFormat;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * Handles language file loading.
- * 
+ *
  * @author MjolnirCommando
  */
 @SuppressWarnings("javadoc")
-public class MCLang
-{
+public class MCLang {
+
     private static String langtag = "MineConomy";
     public static String tag = ChatColor.GREEN + "[" + langtag + "] ";
-    
+
     public static String welcomeMessage = "&fWelcome to MineConomy, %player%! Your balance is &a%pos-balance%&c%neg-balance% &f%currency%. Type '/mc help' for help.";
-    
+
     public static boolean displayWelcome = false;
-    
+
     public static String messageWelcomeAccountCreated = "&fYour MineConomy Account has been created!";
     public static String messageAccountBalance = "&fBalance: &a%pos-balance%&c%neg-balance% &f%currency%";
     public static String messageBankBalance = "&f[%bank%] Balance: &a%pos-balance%&c%neg-balance%";
@@ -73,21 +71,19 @@ public class MCLang
     public static String messageHelp1 = "<br>&a===== MineConomy Help Page 1/3 =====<br>&f<REQUIRED> [OPTION] (OPTIONAL)<br><br>&7/mc help <PAGE>&f - displays this menu.<br>&7/mc balance &for &7/money &f- displays your account balance.<br>&7/mc pay <ACCOUNT> &f- pays specified account.<br>&7/mc get <ACCOUNT> &f- displays specified account's balance.<br>&7/mc set <ACCOUNT> <AMOUNT> &f- sets specified account's balance.<br>&7/mc empty <ACCOUNT> &f- sets specified account's balance to 0.<br>&7/mc create <ACCOUNT> &f- creates new account.<br>&7/mc delete <ACCOUNT> &f- deletes existing account.<br>&7/mc give <ACCOUNT> <AMOUNT> &f- gives specified account the specified amount.<br>&7/mc take <ACCOUNT> <AMOUNT> &f- takes specified amount from the specified account.<br>&7/mc exp &f- displays your amount of experience.";
     public static String messageHelp2 = "<br>&a===== MineConomy Help Page 2/3 =====<br>&7/mc deposit <TYPE> <AMOUNT> &f- deposits specified amount of physical currency into your account.<br>&7/mc withdraw <TYPE> <AMOUNT> &f- withdraws specified amount of physical currency from your account.<br>&7/mc setcurrency (ACCOUNT) <CURRENCY> &f- sets the specified account's currency.<br>&7/mcb <BANK> &f- displays your balance in the specified bank.<br>&7/mcb balance <BANK> &f- displays your balance in the specified bank.<br>&7/mcb create <BANK> (ACCOUNT) &f- creates new bank/bank account.<br>&7/mcb delete <BANK> (ACCOUNT) &f- deletes specified bank/bank account.<br>&7/mcb get <BANK> <ACCOUNT> &f- displays the balance of specified bank account.<br>&7/mcb set <BANK> <ACCOUNT> &f- sets the balance of specified bank account.";
     public static String messageHelp3 = "<br>&a===== MineConomy Help Page 3/3 =====<br>&7/mcb empty <BANK> <ACCOUNT> &f- empties the specified bank account.<br>&7/mcb rename <BANK> (ACCOUNT) <NEW_BANK> (NEW_ACCOUNT) &f- renames the specified bank/bank account.<br>&7/mcb transfer <BANK> (ACCOUNT) <TO_BANK> <TO_ACCOUNT> <AMOUNT> &f- transfers the specified amount from bank account to bank account.<br>&7/mcb join <BANK> &f- joins specified bank.<br>&7/mcb leave <BANK> &f- leaves specified bank.<br>&7/mcb deposit <BANK> <AMOUNT> &f- deposits amount in your account.<br>&7/mcb withdraw <BANK> <AMOUNT> &f- withdraws amount from your account.";
-    
-    public static File                      langFile = new File(
+
+    public static File langFile = new File(
             MineConomy.maindir + "lang/"
-                    + "lang-" + Settings.lang + ".yml");
-    private static YamlConfiguration         lang;
-    
-    public static void load()
-    {
+            + "lang-" + Settings.lang + ".yml");
+    private static YamlConfiguration lang;
+
+    public static void load() {
         lang = YamlConfiguration.loadConfiguration(langFile);
         lang
                 .options()
                 .header("=== MineConomy Language ===\n\n    \n");
 
-        if (!langFile.exists())
-        {
+        if (!langFile.exists()) {
             IOH.log("Language file not found...", IOH.INFO);
             lang.set("Lang", "");
             lang.set("Lang.Tag", langtag);
@@ -140,7 +136,7 @@ public class MCLang
             lang.set("Lang.Message.Help.Page 1", messageHelp1);
             lang.set("Lang.Message.Help.Page 2", messageHelp2);
             lang.set("Lang.Message.Help.Page 3", messageHelp3);
-            
+
             IOH.log("Language file created!", IOH.INFO);
             save();
         }
@@ -148,24 +144,20 @@ public class MCLang
         IOH.log("Loading Language file...", IOH.INFO);
 
         reload();
-        
+
         IOH.log("Language file loaded!", IOH.INFO);
     }
-    
-    public static void reload()
-    {
+
+    public static void reload() {
         lang = YamlConfiguration.loadConfiguration(langFile);
-        
+
         welcomeMessage = MCFormat.color(lang.getString("Lang.Message.Welcome Message", welcomeMessage));
-        if (welcomeMessage.equals(""))
-        {
+        if (welcomeMessage.equals("")) {
             displayWelcome = false;
-        }
-        else
-        {
+        } else {
             displayWelcome = true;
         }
-        
+
         langtag = MCFormat.color(lang.getString("Lang.Tag", langtag));
         messageWelcomeAccountCreated = MCFormat.color(lang.getString("Lang.Message.Welcome Account Created", messageWelcomeAccountCreated));
         messageAccountBalance = MCFormat.color(lang.getString("Lang.Message.Account Balance", messageAccountBalance));
@@ -215,12 +207,11 @@ public class MCLang
         messageHelp1 = MCFormat.color(lang.getString("Lang.Message.Help.Page 1", messageHelp1));
         messageHelp2 = MCFormat.color(lang.getString("Lang.Message.Help.Page 2", messageHelp2));
         messageHelp3 = MCFormat.color(lang.getString("Lang.Message.Help.Page 3", messageHelp3));
-        
+
         tag = ChatColor.GREEN + "[" + langtag + "] ";
     }
-    
-    public static void save()
-    {
+
+    public static void save() {
         lang.set("Lang", "");
         lang.set("Lang.Tag", MCFormat.decolor(langtag));
         lang.set("Lang.Message.Welcome Message", MCFormat.decolor(welcomeMessage));
@@ -272,154 +263,106 @@ public class MCLang
         lang.set("Lang.Message.Help.Page 1", MCFormat.decolor(messageHelp1));
         lang.set("Lang.Message.Help.Page 2", MCFormat.decolor(messageHelp2));
         lang.set("Lang.Message.Help.Page 3", MCFormat.decolor(messageHelp3));
-        
-        try
-        {
+
+        try {
             lang.save(langFile);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             IOH.error("IOException", e);
         }
-        
+
         reload();
     }
-    
-    public static String parse(String message, String[] args)
-    {
-        if (message.equals(welcomeMessage))
-        {
+
+    public static String parse(String message, String[] args) {
+        if (message.equals(welcomeMessage)) {
             message = message.replace("%player%", args[0]);
             message = message.replace("%currency%", args[1]);
-            
+
             double balance = Double.parseDouble(args[2]);
-                
-            if (balance >= 0)
-            {
+
+            if (balance >= 0) {
                 message = message.replace("%pos-balance%", MCFormat.format(balance));
                 message = message.replace("%neg-balance%", "");
-            }
-            else
-            {
+            } else {
                 message = message.replace("%pos-balance%", "");
                 message = message.replace("%neg-balance%", MCFormat.format(balance));
             }
-        }
-        else if (message.equals(messageAccountBalance))
-        {
+        } else if (message.equals(messageAccountBalance)) {
             message = message.replace("%currency%", args[0]);
-            
+
             double balance = Double.parseDouble(args[1]);
-                
-            if (balance >= 0)
-            {
+
+            if (balance >= 0) {
                 message = message.replace("%pos-balance%", MCFormat.format(balance));
                 message = message.replace("%neg-balance%", "");
-            }
-            else
-            {
+            } else {
                 message = message.replace("%pos-balance%", "");
                 message = message.replace("%neg-balance%", MCFormat.format(balance));
             }
-        }
-        else if (message.equals(messageBankBalance))
-        {
+        } else if (message.equals(messageBankBalance)) {
             message = message.replace("%bank%", args[0]);
-            
+
             double balance = Double.parseDouble(args[1]);
-                
-            if (balance >= 0)
-            {
+
+            if (balance >= 0) {
                 message = message.replace("%pos-balance%", MCFormat.format(balance));
                 message = message.replace("%neg-balance%", "");
-            }
-            else
-            {
+            } else {
                 message = message.replace("%pos-balance%", "");
                 message = message.replace("%neg-balance%", MCFormat.format(balance));
             }
-        }
-        else if (message.equals(messageCurrencySet))
-        {
+        } else if (message.equals(messageCurrencySet)) {
             message = message.replace("%player%", args[0]);
             message = message.replace("%currency%", args[1]);
-        }
-        else if (message.equals(messageExpCheck))
-        {
+        } else if (message.equals(messageExpCheck)) {
             message = message.replace("%exp%", args[0]);
-        }
-        else if (message.equals(messageGetBalance) || message.equals(messageSetBalance))
-        {
+        } else if (message.equals(messageGetBalance) || message.equals(messageSetBalance)) {
             message = message.replace("%player%", args[0]);
             message = message.replace("%balance%", MCFormat.format(Double.parseDouble(args[1])));
             message = message.replace("%currency%", args[2]);
-        }
-        else if (message.equals(messageGive))
-        {
+        } else if (message.equals(messageGive)) {
             message = message.replace("%player%", args[0]);
             message = message.replace("%amount%", MCFormat.format(Double.parseDouble(args[1])));
             message = message.replace("%currency%", args[2]);
-        }
-        else if (message.equals(errorTheyEnough))
-        {
+        } else if (message.equals(errorTheyEnough)) {
             message = message.replace("%player%", args[0]);
-        }
-        else if (message.equals(messagePayedTo))
-        {
+        } else if (message.equals(messagePayedTo)) {
             message = message.replace("%amount%", MCFormat.format(Double.parseDouble(args[0])));
             message = message.replace("%currency%", args[1]);
             message = message.replace("%player%", args[2]);
-        }
-        else if (message.equals(messagePayedFrom))
-        {
+        } else if (message.equals(messagePayedFrom)) {
             message = message.replace("%player%", args[0]);
             message = message.replace("%amount%", MCFormat.format(Double.parseDouble(args[1])));
             message = message.replace("%currency%", args[2]);
-        }
-        else if (message.equals(messageTook))
-        {
+        } else if (message.equals(messageTook)) {
             message = message.replace("%amount%", MCFormat.format(Double.parseDouble(args[0])));
             message = message.replace("%currency%", args[1]);
             message = message.replace("%account%", args[2]);
-        }
-        else if (message.equals(messageCreated) || message.equals(messageDeleted) || message.equals(messageEmpty) || message.equals(errorAccountExists))
-        {
+        } else if (message.equals(messageCreated) || message.equals(messageDeleted) || message.equals(messageEmpty) || message.equals(errorAccountExists)) {
             message = message.replace("%account%", args[0]);
-        }
-        else if (message.equals(errorNoBank) || message.equals(errorNoBankAccount) || message.equals(messageBankCreated) || message.equals(errorBankExists) || message.equals(messageBankDeleted))
-        {
+        } else if (message.equals(errorNoBank) || message.equals(errorNoBankAccount) || message.equals(messageBankCreated) || message.equals(errorBankExists) || message.equals(messageBankDeleted)) {
             message = message.replace("%bank%", args[0]);
-        }
-        else if (message.equals(errorBankAccountExists) || message.equals(messageBankAccountDeleted) || message.equals(messageBankAccountCreated) || message.equals(messageEmptyBankAccount))
-        {
+        } else if (message.equals(errorBankAccountExists) || message.equals(messageBankAccountDeleted) || message.equals(messageBankAccountCreated) || message.equals(messageEmptyBankAccount)) {
             message = message.replace("%account%", args[0]);
             message = message.replace("%bank%", args[1]);
-        }
-        else if (message.equals(messageBankRenamed))
-        {
+        } else if (message.equals(messageBankRenamed)) {
             message = message.replace("%bank%", args[0]);
             message = message.replace("%oldbank%", args[1]);
-        }
-        else if (message.equals(messageGetBankAccount) || message.equals(messageSetBankAccount))
-        {
+        } else if (message.equals(messageGetBankAccount) || message.equals(messageSetBankAccount)) {
             message = message.replace("%account%", args[0]);
             message = message.replace("%bank%", args[1]);
             message = message.replace("%balance%", args[2]);
-        }
-        else if (message.equals(messageBankAccountRenamed))
-        {
+        } else if (message.equals(messageBankAccountRenamed)) {
             message = message.replace("%account%", args[0]);
             message = message.replace("%bank%", args[1]);
             message = message.replace("%oldaccount%", args[2]);
             message = message.replace("%oldbank%", args[3]);
-        }
-        else if (message.equals(messageBankAccountDeposit) || message.equals(messageBankAccountWithdraw))
-        {
+        } else if (message.equals(messageBankAccountDeposit) || message.equals(messageBankAccountWithdraw)) {
             message = message.replace("%bank%", args[0]);
             message = message.replace("%account%", args[1]);
             message = message.replace("%amount%", MCFormat.format(Double.parseDouble(args[2])));
         }
-        
+
         return MCFormat.color(message);
     }
 }

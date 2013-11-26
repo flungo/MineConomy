@@ -11,112 +11,95 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.PixelGrabber;
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-
 import me.mjolnir.mineconomy.internal.util.IOH;
 
 /**
  * @author MjolnirCommando
  */
-public class ImagePanel extends JPanel
-{
-	private BufferedImage	image;
-	private int				width;
-	private int				height;
+public class ImagePanel extends JPanel {
 
-	/**
-	 * Creates new ImagePanel
-	 * 
-	 * @param path 
-	 * @param wd 
-	 * @param ht 
-	 */
-	public ImagePanel(String path, int wd, int ht)
-	{
-		image = toBufferedImage(Toolkit.getDefaultToolkit().getImage(
-				ImagePanel.class.getClassLoader().getResource("me/mjolnir/mineconomy/" + path)));
-		width = wd;
-		height = ht;
-	}
+    private BufferedImage image;
+    private int width;
+    private int height;
 
-	@Override
-	public void paintComponent(Graphics g)
-	{
-		g.drawImage(image, 0, 0, width, height, null);
-	}
+    /**
+     * Creates new ImagePanel
+     *
+     * @param path
+     * @param wd
+     * @param ht
+     */
+    public ImagePanel(String path, int wd, int ht) {
+        image = toBufferedImage(Toolkit.getDefaultToolkit().getImage(
+                ImagePanel.class.getClassLoader().getResource("me/mjolnir/mineconomy/" + path)));
+        width = wd;
+        height = ht;
+    }
 
-	private BufferedImage toBufferedImage(Image image)
-	{
-		if (image instanceof BufferedImage)
-		{
-			return (BufferedImage) image;
-		}
+    @Override
+    public void paintComponent(Graphics g) {
+        g.drawImage(image, 0, 0, width, height, null);
+    }
 
-		image = new ImageIcon(image).getImage();
+    private BufferedImage toBufferedImage(Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage) image;
+        }
 
-		boolean hasAlpha = hasAlpha(image);
+        image = new ImageIcon(image).getImage();
 
-		BufferedImage bimage = null;
-		GraphicsEnvironment ge = GraphicsEnvironment
-				.getLocalGraphicsEnvironment();
-		try
-		{
-			int transparency = Transparency.OPAQUE;
-			if (hasAlpha)
-			{
-				transparency = Transparency.BITMASK;
-			}
+        boolean hasAlpha = hasAlpha(image);
 
-			GraphicsDevice gs = ge.getDefaultScreenDevice();
-			GraphicsConfiguration gc = gs.getDefaultConfiguration();
-			bimage = gc.createCompatibleImage(image.getWidth(null),
-					image.getHeight(null), transparency);
-		}
-		catch (HeadlessException e)
-		{
-			IOH.error("HeadlessException", e);
-		}
+        BufferedImage bimage = null;
+        GraphicsEnvironment ge = GraphicsEnvironment
+                .getLocalGraphicsEnvironment();
+        try {
+            int transparency = Transparency.OPAQUE;
+            if (hasAlpha) {
+                transparency = Transparency.BITMASK;
+            }
 
-		if (bimage == null)
-		{
-			int type = BufferedImage.TYPE_INT_RGB;
-			if (hasAlpha)
-			{
-				type = BufferedImage.TYPE_INT_ARGB;
-			}
-			bimage = new BufferedImage(image.getWidth(null),
-					image.getHeight(null), type);
-		}
+            GraphicsDevice gs = ge.getDefaultScreenDevice();
+            GraphicsConfiguration gc = gs.getDefaultConfiguration();
+            bimage = gc.createCompatibleImage(image.getWidth(null),
+                    image.getHeight(null), transparency);
+        } catch (HeadlessException e) {
+            IOH.error("HeadlessException", e);
+        }
 
-		Graphics g = bimage.createGraphics();
+        if (bimage == null) {
+            int type = BufferedImage.TYPE_INT_RGB;
+            if (hasAlpha) {
+                type = BufferedImage.TYPE_INT_ARGB;
+            }
+            bimage = new BufferedImage(image.getWidth(null),
+                    image.getHeight(null), type);
+        }
 
-		g.drawImage(image, 0, 0, null);
-		g.dispose();
+        Graphics g = bimage.createGraphics();
 
-		return bimage;
-	}
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
 
-	private boolean hasAlpha(Image image)
-	{
-		if (image instanceof BufferedImage)
-		{
-			BufferedImage bimage = (BufferedImage) image;
-			return bimage.getColorModel().hasAlpha();
-		}
+        return bimage;
+    }
 
-		PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
-		try
-		{
-			pg.grabPixels();
-		}
-		catch (InterruptedException e)
-		{
-		    IOH.error("InterruptedException", e);
-		}
+    private boolean hasAlpha(Image image) {
+        if (image instanceof BufferedImage) {
+            BufferedImage bimage = (BufferedImage) image;
+            return bimage.getColorModel().hasAlpha();
+        }
 
-		ColorModel cm = pg.getColorModel();
-		return cm.hasAlpha();
-	}
+        PixelGrabber pg = new PixelGrabber(image, 0, 0, 1, 1, false);
+        try {
+            pg.grabPixels();
+        } catch (InterruptedException e) {
+            IOH.error("InterruptedException", e);
+        }
+
+        ColorModel cm = pg.getColorModel();
+        return cm.hasAlpha();
+    }
 }

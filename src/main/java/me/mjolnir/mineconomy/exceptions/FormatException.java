@@ -2,44 +2,39 @@ package me.mjolnir.mineconomy.exceptions;
 
 /**
  * Thrown when there is no account with the given name.
- * 
+ *
  * @author MjolnirCommando
  */
-public class FormatException extends RuntimeException implements MCException
-{
+public class FormatException extends RuntimeException implements MCException {
+
     private String method;
     private String variable;
-    
+
     /**
      * Create new NoAccountException object.
-     * 
-     * @param method 
-     * @param variable 
+     *
+     * @param method
+     * @param variable
      */
-    public FormatException(String method, String variable)
-    {
+    public FormatException(String method, String variable) {
         super();
         this.method = method;
         this.variable = variable;
     }
-    
-    public String getMethodCause()
-    {
+
+    public String getMethodCause() {
         return method;
     }
-    
-    public String getVariableCause()
-    {
+
+    public String getVariableCause() {
         return variable;
     }
-    
-    public String getErrorDescription()
-    {
+
+    public String getErrorDescription() {
         return "The input could not be formatted.";
     }
-    
-    public FormatException getError()
-    {
+
+    public FormatException getError() {
         return this;
     }
 }

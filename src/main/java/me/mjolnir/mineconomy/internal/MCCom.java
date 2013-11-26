@@ -95,7 +95,7 @@ public class MCCom {
         }
     }
 
-	// MineConomy Account Methods ----------------------------------------------
+    // MineConomy Account Methods ----------------------------------------------
     /**
      * Returns the balance of the specified player.
      *
@@ -495,7 +495,7 @@ public class MCCom {
         }
     }
 
-	// MineConomy Currency Methods ---------------------------------------------
+    // MineConomy Currency Methods ---------------------------------------------
     /**
      * Returns the default currency.
      *
@@ -614,7 +614,7 @@ public class MCCom {
         }
     }
 
-	// MineConomy Bank Methods -------------------------------------------------
+    // MineConomy Bank Methods -------------------------------------------------
     /**
      * Returns the balance of the specified account in the specified bank.
      *
@@ -1012,7 +1012,7 @@ public class MCCom {
         return Banking.getBanks();
     }
 
-	// Vault Methods -----------------------------------------------------------
+    // Vault Methods -----------------------------------------------------------
     /**
      * Returns true if the specified account has at least the specified amount.
      * (Currencies are converted.)
@@ -1061,7 +1061,7 @@ public class MCCom {
         MCCom.setBalance(account, base);
     }
 
-	// Basic Variable Getters --------------------------------------------------
+    // Basic Variable Getters --------------------------------------------------
     /**
      * Returns instance of accounting class to use.
      *
