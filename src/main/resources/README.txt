@@ -1,4 +1,4 @@
-.: MineConomy Readme File :.
+.: ${project.name} Readme File (${project.version}) :.
 
 -= Table of Contents =-
 Introduction
@@ -68,7 +68,7 @@ Physical:
   wood:              The name of the physical currency
     Value: 1.0       The currency's value
     ID: '5'          The Minecraft Item ID number of this physical currency surrounded by single-quotes.
-    
+
 * ID's with underscores ('_') before them are special items, such as Experience.
 
 
@@ -133,7 +133,7 @@ mineconomy.* - allows users full access to MineConomy (Not recommended)
     mineconomy.currency.* - allows users full access to this permission branch (Recommended for admins)
         mineconomy.currency.set - allows users to set their own account currency
         mineconomy.currency.set.others - allows users to set other accounts' currencies
-    mineconomy.help - allows users to have the in-game help menu displayed to them. 
+    mineconomy.help - allows users to have the in-game help menu displayed to them.
     mineconomy.save - allows users to save MineConomy data
     mineconomy.reload - allows users to reload MineConomy data
     mineconomy.bank.* - allows users full acces to this permission branch (Recommended for admins)
