@@ -42,7 +42,17 @@ public class MCCom {
 
         Object[] accounts = accounting.treeaccount.toArray();
 
-        return accounting.hashaccount.get(binarySearch(accounting.treeaccount.toArray(), account.toLowerCase(), 0, accounts.length - 1, ex1));
+        try {
+            return accounting.hashaccount.get(binarySearch(accounting.treeaccount.toArray(), account.toLowerCase(), 0, accounts.length - 1, ex1));
+        } catch (NoAccountException ex) {
+            String result = accounting.loadAccount(account);
+            if (result != "") {
+                return result;
+            } else {
+                throw ex;
+            }
+        }
+
     }
 
     private static String binarySearch(Object[] array, String value, int left, int right, String ex1) {

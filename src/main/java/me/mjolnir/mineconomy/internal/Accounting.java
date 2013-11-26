@@ -55,6 +55,11 @@ public final class Accounting extends AccountingBase {
         IOH.log("Accounts file loaded!", IOH.INFO);
     }
 
+    @Override
+    public String loadAccount(String account) {
+        return "";
+    }
+
     /**
      * Reloads accounts file
      */

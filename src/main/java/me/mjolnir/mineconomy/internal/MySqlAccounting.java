@@ -2,6 +2,7 @@ package me.mjolnir.mineconomy.internal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,17 +37,7 @@ public final class MySqlAccounting extends AccountingBase {
             IOH.error("MySQL Error", e);
         }
 
-        ArrayList<String> result = new ArrayList<String>();
-
-        try {
-            ResultSet rs = con.createStatement().executeQuery("SELECT account FROM mineconomy_accounts");
-
-            while (rs.next()) {
-                result.add(rs.getString("account"));
-            }
-        } catch (SQLException e) {
-            IOH.error("MySQL Error", e);
-        }
+        ArrayList<String> result = getAccounts();
 
         hashaccount = new Hashtable<String, String>();
         treeaccount = new TreeSet<String>();
@@ -57,6 +48,25 @@ public final class MySqlAccounting extends AccountingBase {
         }
 
         IOH.log("Accounts loaded from database!", IOH.INFO);
+    }
+
+    @Override
+    public String loadAccount(String account) {
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT account FROM mineconomy_accounts WHERE LOWER(account) = LOWER(?)");
+            ps.setString(1, account);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.first()) {
+                String result = rs.getString("account");
+                hashaccount.put(result.toLowerCase(), result);
+                treeaccount.add(result.toLowerCase());
+                return result;
+            }
+        } catch (SQLException ex) {
+            IOH.error("MySQL Error", ex);
+        }
+        return "";
     }
 
     public void reload() {

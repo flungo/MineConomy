@@ -13,6 +13,8 @@ public abstract class AccountingBase {
 
     public abstract void load();
 
+    public abstract String loadAccount(String account);
+
     public abstract void reload();
 
     public abstract void save();
