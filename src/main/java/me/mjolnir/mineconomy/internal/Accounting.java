@@ -131,8 +131,8 @@ public final class Accounting extends AccountingBase {
     protected void setBalance(String account, double amount) {
         amount = (double) Math.round(amount * 100) / 100;
 
-        if (amount > 9999999.99) {
-            amount = 9999999.99;
+        if (Settings.maxBalance > 0 && amount > Settings.maxBalance) {
+            amount = Settings.maxBalance;
         }
 
         accountbalance.put(account, amount);

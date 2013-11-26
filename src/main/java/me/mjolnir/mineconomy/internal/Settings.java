@@ -20,6 +20,7 @@ public class Settings {
 
     public static double startingBalance = 0.0;
     public static double maxDebt = 0.0;
+    public static double maxBalance = 9999999.99;
     public static String interestMode = "none";
     public static double interestAmount = 0.0;
     public static int interestInterval = 0;
@@ -50,6 +51,7 @@ public class Settings {
             IOH.log("Config file not found. Creating Config file...", IOH.INFO);
             config.set("Balance.Starting Balance", 0);
             config.set("Balance.Max Debt", 0);
+            config.set("Balance.Max Balance", 9999999.99);
             config.set("Display GUI", false);
             config.set("Warn Ops", true);
             config.set("Log Priority", 5);
@@ -87,6 +89,7 @@ public class Settings {
 
         startingBalance = config.getDouble("Balance.Starting Balance", startingBalance);
         maxDebt = Math.abs(config.getDouble("Balance.Max Debt", maxDebt));
+        maxBalance = config.getDouble("Balance.Max Balance", maxBalance);
         gui = config.getBoolean("Display GUI", gui);
         ops = config.getBoolean("Warn Ops", ops);
         interestAmount = config.getDouble("Interest.Amount", interestAmount);
@@ -113,6 +116,7 @@ public class Settings {
     public static void save() {
         config.set("Balance.Starting Balance", startingBalance);
         config.set("Balance.Max Debt", maxDebt);
+        config.set("Balance.Max Balance", maxBalance);
         config.set("Display GUI", gui);
         config.set("Warn Ops", ops);
         config.set("Interest.Amount", interestAmount);
