@@ -13,7 +13,6 @@ import me.mjolnir.mineconomy.exceptions.NoBankException;
 import me.mjolnir.mineconomy.exceptions.NoCurrencyException;
 import me.mjolnir.mineconomy.exceptions.NoCurrencyIdException;
 import me.mjolnir.mineconomy.internal.util.IOH;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Handles exterior classes reading/writing account values.
@@ -22,7 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class MCCom {
 
-    private static MineConomy plugin = new MineConomy();
     private static AccountingBase accounting = null;
 
     /**
@@ -1117,7 +1115,7 @@ public class MCCom {
      *
      * @return MineConomy
      */
-    public static JavaPlugin getPlugin() {
-        return plugin;
+    public static MineConomy getPlugin() {
+        return MineConomy.plugin;
     }
 }
